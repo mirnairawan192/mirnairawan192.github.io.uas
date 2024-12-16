@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Ikan</title>
+    <title>Data Pegawai</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
@@ -12,7 +12,6 @@
         body {
             background-color: #f7f9fc;
             font-family: 'Poppins', sans-serif;
-            font-size: 14px;
         }
         .table-header {
             background-color: #003366; /* Biru tua */
@@ -21,40 +20,32 @@
             text-align: center;
             font-weight: bold;
         }
-        .btn-edit {
+        .btn-warning {
             background-color: #fbc02d;
+            border: none;
             color: white;
-            font-size: 12px;
         }
-        .btn-edit:hover {
+        .btn-warning:hover {
             background-color: #f9a825;
-            color: white;
         }
-        .btn-delete {
+        .btn-danger {
             background-color: #d32f2f;
+            border: none;
             color: white;
-            font-size: 12px;
         }
-        .btn-delete:hover {
+        .btn-danger:hover {
             background-color: #c62828;
-            color: white;
         }
-        .status-tersedia {
-            color: white;
+        .btn-success {
             background-color: #388e3c;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-        .status-kosong {
+            border: none;
             color: white;
-            background-color: #d32f2f;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
+        }
+        .btn-success:hover {
+            background-color: #2e7d32;
         }
         .page-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: #003366;
             font-weight: bold;
             margin-bottom: 1.5rem;
@@ -65,6 +56,9 @@
         }
         .table tbody tr:nth-child(even) {
             background-color: #e8e8e8; /* Abu-abu lebih terang */
+        }
+        .navbar {
+            margin-bottom: 1.5rem;
         }
     </style>
 </head>
@@ -89,58 +83,50 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <h2 class="page-title">Data Ikan</h2>
+    <div class="container">
+        <h2 class="page-title">Data Pegawai</h2>
 
         <!-- Form Pencarian -->
-        <form action="{{ route('ikan.index') }}" method="GET" class="mb-4">
+        <form action="{{ route('pegawai.index') }}" method="GET" class="mb-4">
             <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Cari nama ikan..." value="{{ request('search') }}">
-                <button class="btn btn-primary" type="submit">Cari</button>
+                <input type="text" name="search" class="form-control" placeholder="Cari nama pegawai..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary">Cari</button>
             </div>
         </form>
 
-        <!-- Tabel Data Ikan -->
+        <!-- Tabel Data Pegawai -->
         <table class="table table-bordered table-hover">
             <thead class="table-header">
                 <tr>
-                    <th>Kode Ikan</th>
-                    <th>Nama Ikan</th>
-                    <th>Jumlah Ikan</th>
-                    <th>Status</th>
+                    <th>Kode Pegawai</th>
+                    <th>Nama Pegawai</th>
+                    <th>Jabatan</th>
+                    <th>Gaji</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($dataIkan as $index => $ikan)
+                @foreach($dataPegawai as $pegawai)
                 <tr>
-                    <td>{{ 19201 + $index }}</td>
-                    <td>{{ $ikan->nama_ikan }}</td>
-                    <td>{{ $ikan->jumlah_ikan }}</td>
+                    <td>{{ $pegawai->kode_pegawai }}</td>
+                    <td>{{ $pegawai->nama_pegawai }}</td>
+                    <td>{{ $pegawai->jabatan }}</td>
+                    <td>{{ number_format($pegawai->gaji, 0, ',', '.') }}</td>
                     <td>
-                        @if($ikan->tersedia === 'Y')
-                            <span class="status-tersedia">✔ Tersedia (Y)</span>
-                        @else
-                            <span class="status-kosong">✘ Kosong (N)</span>
-                        @endif
-                    </td>
-                    <td>
-                        <a href="{{ route('ikan.edit', $ikan->kode_ikan) }}" class="btn btn-edit btn-sm">
-                            ✏ Edit
-                        </a>
-                        <form action="{{ route('ikan.destroy', $ikan->kode_ikan) }}" method="POST" style="display: inline;">
+                        <a href="{{ route('pegawai.edit', $pegawai->kode_pegawai) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('pegawai.destroy', $pegawai->kode_pegawai) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-delete btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                🗑 Hapus
-                            </button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</button>
                         </form>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-        <p class="text-center mt-4 text-secondary">Data terakhir diperbarui: {{ now()->format('d-m-Y H:i') }}</p>
+        <a href="{{ route('pegawai.create') }}" class="btn btn-success mt-3">Tambah Pegawai</a>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

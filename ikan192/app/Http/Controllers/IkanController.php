@@ -20,8 +20,9 @@ class IkanController extends Controller
         // Ambil hasil query
         $dataIkan = $query->get();
 
-        // Kirim data ke view
-        return view('ikan.index', compact('dataIkan'));
+        // Kirim data dan kata kunci pencarian ke view
+        $search = $request->input('search'); // Ambil nilai pencarian
+        return view('ikan.index', compact('dataIkan', 'search'));
     }
 
     // Method untuk menampilkan form tambah data ikan
